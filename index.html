@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring Energi Terbarukan</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+.app{display:flex;min-height:100vh}.side{width:245px;background:#101827;color:#dce5f2;padding:22px 15px;position:fixed;top:0;bottom:0}
+.brand{display:flex;gap:11px;align-items:center;padding:5px 10px 28px}.logo{width:42px;height:42px;border-radius:12px;background:#fff;color:#111827;display:grid;place-items:center;font-size:22px}.brand b{display:block;color:#fff;font-size:17px}.brand small{color:#8fa1b8}
+.nav a{display:block;color:#9eacc0;text-decoration:none;padding:12px 13px;border-radius:9px;margin:4px 0;font-weight:bold}.nav a.active,.nav a:hover{background:#25344b;color:white}
+.foot{position:absolute;bottom:20px;left:25px;right:15px;font-size:11px;color:#8090a7}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef5663;margin-right:6px}.dot.on{background:#20c77b}
+main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}.top{height:88px;border-bottom:1px solid #e3e8ef;display:flex;justify-content:space-between;align-items:center}.top h1{font-size:23px;margin:4px 0}.eyebrow{font-size:10px;letter-spacing:1.5px;color:#8794a7;font-weight:bold}.clock{text-align:right;font-size:12px;color:#68778c}.clock strong{font-size:17px;color:#172033;display:block}.badge{display:inline-block;margin-left:12px;padding:8px 11px;border-radius:20px;background:#eef2f7}
+.page{display:none;padding-top:25px}.page.active{display:block}.intro{margin-bottom:20px}.intro h2{margin:0 0 5px;font-size:20px}.intro p{margin:0;color:#7d8a9c;font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.card,.panel{background:white;border:1px solid #e3e8ef;border-radius:14px;box-shadow:0 5px 20px rgba(20,35,60,.04)}.card{padding:17px;cursor:pointer}.card:hover{transform:translateY(-2px)}.label{font-size:12px;color:#738196;font-weight:bold}.value{font-size:30px;font-weight:800;margin-top:15px}.unit{font-size:12px;color:#8491a3}.mini{height:45px;margin-top:8px}
+.cols{display:grid;grid-template-columns:1.4fr 1fr;gap:15px;margin-top:15px}.panel{padding:20px}.panel h3{margin:0;font-size:15px}.panel p{font-size:12px;color:#8491a3}.relay{display:flex;align-items:center;gap:15px;padding-top:15px}.lamp{font-size:35px}.state{margin-left:auto;padding:7px 10px;border-radius:20px;font-size:10px;font-weight:bold}.state.on{background:#e9fbf2;color:#16804e}.state.off{background:#fbecee;color:#b93c4a}.status div{display:flex;justify-content:space-between;border-bottom:1px solid #edf1f5;padding:12px 0;font-size:12px}.green{color:#16804e}.red{color:#bf4350}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:15px}.chart{height:320px}.chart:last-child{grid-column:1/-1}.chart canvas{width:100%;height:250px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{padding:12px;border-bottom:1px solid #edf1f5;text-align:left;white-space:nowrap}.table th{background:#f8fafc;color:#6f7d90}.btn{border:0;background:#172238;color:white;border-radius:8px;padding:10px 14px;font-weight:bold;cursor:pointer}.schedule{display:grid;grid-template-columns:1fr 1fr;gap:15px}.schedule label{font-size:12px;color:#69778b}.schedule input{display:block;width:100%;padding:10px;margin-top:7px;border:1px solid #dce3eb;border-radius:8px}.note{margin-top:15px;padding:12px;background:#f5f8fb;border-radius:8px;line-height:1.5}
+@media(max-width:1050px){.cards{grid-template-columns:repeat(3,1fr)}}@media(max-width:800px){.side{width:65px;padding:15px 7px}.brand div:not(.logo),.nav span,.foot{display:none}main{margin-left:65px;width:calc(100% - 65px);padding:0 15px}.cards,.cols,.charts{grid-template-columns:1fr}.chart:last-child{grid-column:auto}.top{height:auto;padding:15px 0}.clock{display:none}}@media(max-width:500px){.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand"><div class="logo">⚡</div><div><b>Monitoring</b><small>Energi Terbarukan</small></div></div>
+  <nav class="nav">
+    <a href="#dashboard" data-page="dashboard" class="active">⌂ <span>Dashboard</span></a>
+    <a href="#grafik" data-page="grafik">◒ <span>Grafik</span></a>
+    <a href="#histori" data-page="histori">◷ <span>Histori</span></a>
+    <a href="#jadwal" data-page="jadwal">◉ <span>Jadwal Sistem</span></a>
+  </nav>
+  <div class="foot"><span id="connDot" class="dot"></span><span id="conn">Menghubungkan...</span><br>Firebase Realtime Database</div>
+</aside>
+
+<main>
+<header class="top">
+  <div><div class="eyebrow">SISTEM MONITORING</div><h1 id="title">Dashboard Realtime</h1></div>
+  <div class="clock"><strong id="clock">--:--:--</strong><span id="date">--</span><span class="badge"><span id="headDot" class="dot"></span><span id="headStatus">Offline</span></span></div>
+</header>
+
+<section id="dashboard" class="page active">
+<div class="intro"><h2>Pembacaan Sensor Realtime</h2><p>Klik parameter untuk melihat grafik dan histori.</p></div>
+<div class="cards">
+  <div class="card" data-p="temperature"><div class="label">🌡️ Suhu</div><div class="value" id="temperature">--</div><span class="unit">°C</span></div>
+  <div class="card" data-p="humidity"><div class="label">💧 Kelembapan</div><div class="value" id="humidity">--</div><span class="unit">%</span></div>
+  <div class="card" data-p="rainfall"><div class="label">🌧️ Curah Hujan</div><div class="value" id="rainfall">--</div><span class="unit">mm</span></div>
+  <div class="card" data-p="light"><div class="label">☀️ Intensitas Cahaya</div><div class="value" id="light">--</div><span class="unit">lux</span></div>
+  <div class="card" data-p="windSpeed"><div class="label">🌬️ Kecepatan Angin</div><div class="value" id="windSpeed">--</div><span class="unit">m/s</span></div>
+</div>
+<div class="cols">
+  <div class="panel"><h3>💡 Lampu / Relay Otomatis</h3><p>Relay dikendalikan berdasarkan waktu, tanpa mode manual.</p><div class="relay"><div class="lamp">💡</div><div><b id="relayText">Lampu mati</b><p id="relaySchedule">06:00 OFF • 18:00 ON</p></div><span id="relayState" class="state off">MATI</span></div></div>
+  <div class="panel status"><h3>Status Sistem</h3><div><span>Dashboard</span><b class="green">Online</b></div><div><span>Firebase</span><b id="fbStatus">Menghubungkan...</b></div><div><span>Perangkat</span><b id="deviceStatus">Menunggu data</b></div><div><span>Update terakhir</span><b id="lastUpdate">-</b></div></div>
+</div>
+</section>
+
+<section id="grafik" class="page">
+<div class="intro"><h2>Grafik 5 Parameter</h2><p>Sumbu X = waktu, sumbu Y = pembacaan sensor.</p></div>
+<div class="charts">
+<div class="panel chart"><h3>🌡️ Suhu</h3><canvas id="c-temperature"></canvas></div>
+<div class="panel chart"><h3>💧 Kelembapan</h3><canvas id="c-humidity"></canvas></div>
+<div class="panel chart"><h3>🌧️ Curah Hujan</h3><canvas id="c-rainfall"></canvas></div>
+<div class="panel chart"><h3>☀️ Intensitas Cahaya</h3><canvas id="c-light"></canvas></div>
+<div class="panel chart"><h3>🌬️ Kecepatan Angin</h3><canvas id="c-windSpeed"></canvas></div>
+</div>
+</section>
+
+<section id="histori" class="page">
+<div class="intro"><h2>Histori Pembacaan</h2><p>Data dibaca dari /history pada Firebase.</p></div>
+<div class="panel table-wrap"><table class="table"><thead><tr><th>Waktu</th><th>Suhu</th><th>Kelembapan</th><th>Hujan</th><th>Cahaya</th><th>Angin</th><th>Status</th></tr></thead><tbody id="history"><tr><td colspan="7">Belum ada data.</td></tr></tbody></table></div>
+</section>
+
+<section id="jadwal" class="page">
+<div class="intro"><h2>Jadwal Lampu Otomatis</h2><p>Tidak ada kontrol relay manual.</p></div>
+<div class="cols">
+<div class="panel"><h3>Jadwal</h3><p>Default: lampu ON pukul 18:00 dan OFF pukul 06:00.</p><div class="schedule"><label>Waktu ON<input id="onTime" type="time" value="18:00"></label><label>Waktu OFF<input id="offTime" type="time" value="06:00"></label></div><button class="btn" id="save">Simpan Jadwal</button><div class="note">Agar relay tetap bekerja ketika GitHub Pages ditutup, ESP32 juga harus menjalankan logika waktu menggunakan NTP/RTC.</div></div>
+<div class="panel"><h3>Path Firebase</h3><pre>/sensor/current
+/history
+/control/relay
+
+Field sensor:
+temperature
+humidity
+rainfall
+light
+windSpeed
+timestamp
+status</pre></div>
+</div>
+</section>
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module">
+/* ==========================================================
+   FIREBASE CONFIG
+   Isi nilai berikut dengan konfigurasi Web App Firebase Anda.
+   ========================================================== */
+const firebaseConfig = {
+  apiKey: "ISI_API_KEY_FIREBASE",
+  authDomain: "monitoring-energi-terbarukan.firebaseapp.com",
+  databaseURL: "ISI_DATABASE_URL_FIREBASE",
+  projectId: "monitoring-energi-terbarukan",
+  storageBucket: "monitoring-energi-terbarukan.firebasestorage.app",
+  messagingSenderId: "ISI_MESSAGING_SENDER_ID",
+  appId: "ISI_APP_ID"
+};
+
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getDatabase,ref,onValue,update} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+const app=initializeApp(firebaseConfig), db=getDatabase(app);
+const params=["temperature","humidity","rainfall","light","windSpeed"];
+let history=[], charts={};
+
+const $=id=>document.getElementById(id);
+function time(v){if(!v)return "-";let d=typeof v==="number"?new Date(v<1e12?v*1000:v):new Date(v);return isNaN(d)?"-":d.toLocaleString("id-ID")}
+function ts(x){if(typeof x.timestamp==="number")return x.timestamp;let d=Date.parse(x.timestamp||"");return isNaN(d)?0:d}
+
+function renderCurrent(x){
+ if(!x)return;
+ params.forEach(p=>{let n=Number(x[p]);$(p).textContent=Number.isFinite(n)?n:"--"});
+ $("lastUpdate").textContent=time(x.timestamp);
+ $("deviceStatus").textContent=x.status||"Data diterima";
+}
+function renderHistory(raw){
+ history=raw?Object.values(raw).sort((a,b)=>ts(a)-ts(b)).slice(-100):[];
+ $("history").innerHTML=history.length?history.slice().reverse().map(x=>`<tr><td>${time(x.timestamp)}</td><td>${x.temperature??"-"} °C</td><td>${x.humidity??"-"} %</td><td>${x.rainfall??"-"} mm</td><td>${x.light??"-"} lux</td><td>${x.windSpeed??"-"} m/s</td><td>${x.status||"OK"}</td></tr>`).join(""):'<tr><td colspan="7">Belum ada data.</td></tr>';
+ if(location.hash==="#grafik")draw();
+}
+function draw(){
+ params.forEach(p=>{
+  const el=$("c-"+p);if(!el)return;
+  if(charts[p])charts[p].destroy();
+  charts[p]=new Chart(el,{type:"line",data:{labels:history.map(x=>ts(x)),datasets:[{label:p,data:history.map(x=>Number(x[p])),borderWidth:2,pointRadius:2,tension:.25}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{type:"linear",ticks:{callback:v=>new Date(v).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"})},title:{display:true,text:"Waktu"}},y:{title:{display:true,text:"Pembacaan"}}}}});
+ });
+}
+function schedule(on,off){
+ const d=new Date(),cur=d.getHours()*60+d.getMinutes(),[oh,om]=on.split(":").map(Number),[fh,fm]=off.split(":").map(Number),a=oh*60+om,b=fh*60+fm;
+ return a>b?(cur>=a||cur<b):(cur>=a&&cur<b);
+}
+async function syncRelay(){
+ const on=$("onTime").value||"18:00",off=$("offTime").value||"06:00",state=schedule(on,off);
+ $("relayState").textContent=state?"NYALA":"MATI";$("relayState").className="state "+(state?"on":"off");$("relayText").textContent=state?"Lampu menyala":"Lampu mati";
+ try{await update(ref(db,"control/relay"),{state,mode:"auto",onTime:on,offTime:off,updatedAt:Date.now()})}catch(e){}
+}
+onValue(ref(db,".info/connected"),s=>{let ok=s.val()===true;$("conn").textContent=ok?"Firebase Online":"Firebase Offline";$("fbStatus").textContent=ok?"Terhubung":"Terputus";$("fbStatus").className=ok?"green":"red";$("connDot").className="dot "+(ok?"on":"");$("headDot").className="dot "+(ok?"on":"");$("headStatus").textContent=ok?"Online":"Offline"});
+onValue(ref(db,"sensor/current"),s=>renderCurrent(s.val()));
+onValue(ref(db,"history"),s=>renderHistory(s.val()));
+onValue(ref(db,"control/relay"),s=>{let x=s.val();if(x){$("onTime").value=x.onTime||"18:00";$("offTime").value=x.offTime||"06:00";}});
+$("save").onclick=()=>syncRelay();
+setInterval(syncRelay,30000);
+
+const titles={dashboard:"Dashboard Realtime",grafik:"Grafik Sensor",histori:"Histori Pembacaan",jadwal:"Jadwal Sistem"};
+function nav(){let p=location.hash.slice(1)||"dashboard";document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$(titles[p]?p:"dashboard").classList.add("active");document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.dataset.page===p));$("title").textContent=titles[p]||titles.dashboard;if(p==="grafik")setTimeout(draw,50)}
+addEventListener("hashchange",nav);nav();
+document.querySelectorAll(".card").forEach(c=>c.onclick=()=>{location.hash="grafik"});
+function clock(){let d=new Date();$("clock").textContent=d.toLocaleTimeString("id-ID");$("date").textContent=d.toLocaleDateString("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"})}clock();setInterval(clock,1000);
+</script>
+</body>
+</html>
