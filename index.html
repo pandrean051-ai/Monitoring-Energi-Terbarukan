@@ -10,7 +10,8 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#1
 .app{display:flex;min-height:100vh}
 .side{width:245px;background:#101827;color:#dce5f2;padding:22px 15px;position:fixed;top:0;bottom:0}
 .brand{display:flex;gap:11px;align-items:center;padding:5px 10px 28px}
-.logo{width:42px;height:42px;border-radius:12px;background:#fff;color:#111827;display:grid;place-items:center;font-size:22px}
+/* Penyesuaian Logo Sidebar */
+.brand img{width:45px;height:45px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid #25344b;}
 .brand b{display:block;color:#fff;font-size:17px}.brand small{color:#8fa1b8}
 .nav{position:relative;z-index:10}
 .nav a{display:block;color:#9eacc0;text-decoration:none;padding:12px 13px;border-radius:9px;margin:4px 0;font-weight:bold;cursor:pointer;user-select:none}
@@ -22,7 +23,8 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#1
 main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
 .top{height:88px;border-bottom:1px solid #e3e8ef;display:flex;justify-content:space-between;align-items:center}
 .title-wrap{display:flex;align-items:center;gap:14px}
-.site-logo{width:54px;height:54px;object-fit:contain;border-radius:50%;background:white;border:2px solid #e5eaf0;padding:2px}
+/* Penyesuaian Logo Header */
+.site-logo{width:54px;height:54px;object-fit:cover;border-radius:50%;background:white;border:2px solid #e5eaf0;}
 .top h1{font-size:23px;margin:4px 0}
 .eyebrow{font-size:10px;letter-spacing:1.5px;color:#8794a7;font-weight:bold}
 .clock{text-align:right;font-size:12px;color:#68778c}
@@ -51,14 +53,17 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
 .status div{display:flex;justify-content:space-between;border-bottom:1px solid #edf1f5;padding:12px 0;font-size:12px}
 .charts{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 .chart{background:white;border:1px solid #e3e8ef;border-radius:14px;padding:15px;box-shadow:0 5px 20px rgba(20,35,60,.04)}
-.chart.full{grid-column:1/-1}
+/* Khusus chart ke-5 agar berada di tengah/penuh */
+.chart.full{grid-column:1/-1} 
 .chart canvas{width:100%!important;height:250px!important}
 .table-wrap{overflow:auto;background:white;border-radius:14px;border:1px solid #e3e8ef}
 .table{width:100%;border-collapse:collapse;font-size:12px}
 .table th,.table td{padding:12px;border-bottom:1px solid #edf1f5;text-align:left;white-space:nowrap}
 .table th{background:#f8fafc;color:#6f7d90}
-.btn{border:0;background:#172238;color:white;border-radius:8px;padding:10px 14px;font-weight:bold;cursor:pointer}
+.btn{border:0;background:#172238;color:white;border-radius:8px;padding:10px 14px;font-weight:bold;cursor:pointer; display:inline-flex; align-items:center; gap:6px;}
 .btn:hover{background:#25344b}
+.btn-success{background:#16804e;}
+.btn-success:hover{background:#0f5e38;}
 .schedule{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 .schedule label{font-size:12px;color:#69778b}
 .schedule input{display:block;width:100%;padding:10px;margin-top:7px;border:1px solid #dce3eb;border-radius:8px}
@@ -68,7 +73,7 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
 @media(max-width:500px){.cards{grid-template-columns:1fr}}
 </style>
 
-<!-- Firebase App & Database (SDK v8 Compat) -->
+<!-- Firebase App & Database -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <!-- Chart.js -->
@@ -78,7 +83,8 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
 <div class="app">
   <aside class="side">
     <div class="brand">
-      <div class="logo">⚡</div>
+      <!-- Menggunakan logo yang diminta -->
+      <img src="image_f55e7b.jpg" alt="Logo">
       <div><b>Monitoring</b><small>Energi Terbarukan</small></div>
     </div>
     <nav class="nav">
@@ -96,7 +102,8 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
   <main>
     <header class="top">
       <div class="title-wrap">
-        <div class="logo" style="border: 2px solid #e3e8ef;">🌱</div>
+        <!-- Menggunakan logo yang diminta -->
+        <img class="site-logo" src="image_f55e7b.jpg" alt="Logo Institusi">
         <div>
           <span class="eyebrow">STASIUN MONITORING</span>
           <h1>Sistem Energi Terbarukan</h1>
@@ -141,7 +148,7 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
       <div class="cols">
         <div class="panel">
           <h3>Kontrol Relai Utama</h3>
-          <p>Aktifkan atau nonaktifkan beban eksternal melalui Firebase Realtime Database.</p>
+          <p>Aktifkan atau nonaktifkan beban eksternal melalui Firebase.</p>
           <div class="relay">
             <div class="lamp" id="lampIcon">💡</div>
             <div>
@@ -166,33 +173,47 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
       </div>
     </section>
 
-    <!-- PAGE 2: GRAFIK -->
+    <!-- PAGE 2: GRAFIK (DIUBAH JADI 5 GRAFIK) -->
     <section id="grafik" class="page">
       <div class="intro">
         <h2>Grafik Tren Parameter</h2>
-        <p>Visualisasi perubahan variabel lingkungan berdasarkan data histori.</p>
+        <p>Visualisasi perubahan tiap variabel lingkungan berdasarkan data histori secara mandiri.</p>
       </div>
       <div class="charts">
         <div class="chart">
-          <h3>Suhu & Kelembapan</h3>
-          <canvas id="chartSuhuKelembapan"></canvas>
+          <h3>Suhu (°C)</h3>
+          <canvas id="chartSuhu"></canvas>
+        </div>
+        <div class="chart">
+          <h3>Kelembapan (%)</h3>
+          <canvas id="chartKelembapan"></canvas>
         </div>
         <div class="chart">
           <h3>Intensitas Cahaya (Lux)</h3>
           <canvas id="chartCahaya"></canvas>
         </div>
+        <div class="chart">
+          <h3>Kecepatan Angin (m/s)</h3>
+          <canvas id="chartAngin"></canvas>
+        </div>
         <div class="chart full">
-          <h3>Kecepatan Angin & Curah Hujan</h3>
-          <canvas id="chartAnginHujan"></canvas>
+          <h3>Curah Hujan (mm)</h3>
+          <canvas id="chartHujan"></canvas>
         </div>
       </div>
     </section>
 
-    <!-- PAGE 3: HISTORI -->
+    <!-- PAGE 3: HISTORI & DOWNLOAD CSV -->
     <section id="histori" class="page">
-      <div class="intro">
-        <h2>Histori Pengukuran</h2>
-        <p>Log catatan data sensor yang tersimpan di Firebase Realtime Database.</p>
+      <div class="intro" style="display:flex; justify-content:space-between; align-items:flex-end;">
+        <div>
+          <h2>Histori Pengukuran</h2>
+          <p>Log catatan data sensor yang tersimpan di Firebase Realtime Database.</p>
+        </div>
+        <!-- Tombol Download CSV -->
+        <button class="btn btn-success" id="btnDownloadCSV">
+          <span>📥</span> Unduh Data (CSV)
+        </button>
       </div>
       <div class="table-wrap">
         <table class="table">
@@ -249,14 +270,13 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
 const firebaseConfig = {
   databaseURL: "https://monitoring-energi-terbarukan-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
-
-// Inisialisasi Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 // State Variabel
 let currentRelayState = false;
-let chartInstance1, chartInstance2, chartInstance3;
+let globalHistoryData = []; // Untuk simpan data CSV
+let cSuhu, cKelembapan, cCahaya, cAngin, cHujan; // Objek Chart 1-5
 
 // --- 2. NAVIGASI TULISAN HALAMAN (SPA) ---
 const navLinks = document.querySelectorAll('.nav a');
@@ -273,11 +293,13 @@ navLinks.forEach(link => {
     link.classList.add('active');
     document.getElementById(targetPage).classList.add('active');
 
-    // Re-render chart saat membuka halaman grafik agar tidak pipih
-    if(targetPage === 'grafik' && chartInstance1) {
-      chartInstance1.resize();
-      chartInstance2.resize();
-      chartInstance3.resize();
+    // Re-render chart jika buka halaman grafik agar tidak "pipih/tergencet"
+    if(targetPage === 'grafik') {
+      if(cSuhu) cSuhu.resize();
+      if(cKelembapan) cKelembapan.resize();
+      if(cCahaya) cCahaya.resize();
+      if(cAngin) cAngin.resize();
+      if(cHujan) cHujan.resize();
     }
   });
 });
@@ -311,28 +333,23 @@ db.ref(".info/connected").on("value", (snap) => {
   }
 });
 
-// --- 5. MONITORING REAL-TIME (DARI NODE /history DATA TERAKHIR) ---
+// --- 5. MONITORING REAL-TIME (NODE /history DATA TERAKHIR) ---
 const historyRef = db.ref('history');
-
-// Ambil data terbaru secara realtime
 historyRef.limitToLast(1).on('child_added', (snapshot) => {
   const data = snapshot.val();
   if (!data) return;
-
-  document.getElementById('valSuhu').textContent = data.suhu ?? 0;
-  document.getElementById('valKelembapan').textContent = data.kelembapan ?? 0;
-  document.getElementById('valAngin').textContent = data.kecepatan_angin ?? 0;
-  document.getElementById('valCahaya').textContent = data.cahaya_lux ?? 0;
-  document.getElementById('valHujan').textContent = data.curah_hujan ?? 0;
+  document.getElementById('valSuhu').textContent = Math.round(data.suhu ?? 0);
+  document.getElementById('valKelembapan').textContent = Math.round(data.kelembapan ?? 0);
+  document.getElementById('valAngin').textContent = Math.round(data.kecepatan_angin ?? 0);
+  document.getElementById('valCahaya').textContent = Math.round(data.cahaya_lux ?? 0);
+  document.getElementById('valHujan').textContent = Math.round(data.curah_hujan ?? 0);
   document.getElementById('lastUpdate').textContent = data.timestamp || new Date().toLocaleTimeString('id-ID');
 });
 
-// --- 6. KONTROL RELAY (NODE /control/relay) ---
+// --- 6. KONTROL RELAY ---
 const relayRef = db.ref('control/relay');
-
 relayRef.on('value', (snapshot) => {
   const val = snapshot.val();
-  // Mendukung boolean (true/false) atau angka (1/0) atau string ("ON"/"OFF")
   currentRelayState = (val === true || val === 1 || val === "ON" || val === "1");
 
   const badge = document.getElementById('relayBadge');
@@ -352,100 +369,135 @@ relayRef.on('value', (snapshot) => {
   }
 });
 
-// Tombol Toggle Relay
 document.getElementById('btnToggleRelay').addEventListener('click', () => {
   const newState = !currentRelayState;
-  relayRef.set(newState)
-    .then(() => console.log("Relay berhasil diperbarui:", newState))
-    .catch((err) => alert("Gagal memperbarui relay: " + err.message));
+  relayRef.set(newState).catch(err => alert("Gagal memperbarui relay: " + err.message));
 });
 
-// --- 7. LOAD HISTORI TABEL & GRAFIK (20 DATA TERAKHIR) ---
+// --- 7. LOAD HISTORI TABEL & GRAFIK ---
 historyRef.limitToLast(20).on('value', (snapshot) => {
   const dataObj = snapshot.val();
   const tableBody = document.getElementById('tableBody');
   
   if (!dataObj) {
     tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada data histori.</td></tr>';
+    globalHistoryData = [];
     return;
   }
 
   const items = Object.values(dataObj);
+  globalHistoryData = items.slice().reverse(); // Simpan untuk file CSV (terbaru di atas)
   
-  // 1. Populate Tabel Histori
   tableBody.innerHTML = '';
-  items.slice().reverse().forEach((item, index) => {
+  globalHistoryData.forEach((item, index) => {
     const row = `
       <tr>
         <td>${index + 1}</td>
         <td>${item.timestamp || '-'}</td>
-        <td>${item.suhu ?? 0} °C</td>
-        <td>${item.kelembapan ?? 0} %</td>
-        <td>${item.kecepatan_angin ?? 0} m/s</td>
-        <td>${item.cahaya_lux ?? 0} Lux</td>
-        <td>${item.curah_hujan ?? 0}</td>
+        <td>${Math.round(item.suhu ?? 0)} °C</td>
+        <td>${Math.round(item.kelembapan ?? 0)} %</td>
+        <td>${Math.round(item.kecepatan_angin ?? 0)} m/s</td>
+        <td>${Math.round(item.cahaya_lux ?? 0)} Lux</td>
+        <td>${Math.round(item.curah_hujan ?? 0)}</td>
       </tr>
     `;
     tableBody.innerHTML += row;
   });
 
-  // 2. Render Chart
+  // Render 5 Grafik
   renderCharts(items);
 });
 
-// --- 8. INISIALISASI CHART.JS ---
+// --- 8. LOGIKA UNDUH CSV ---
+document.getElementById('btnDownloadCSV').addEventListener('click', () => {
+  if (globalHistoryData.length === 0) {
+    alert("Belum ada data histori untuk diunduh.");
+    return;
+  }
+
+  // Membuat Format CSV
+  let csvContent = "data:text/csv;charset=utf-8,";
+  // Header CSV
+  csvContent += "No,Waktu,Suhu (*C),Kelembapan (%),Kecepatan Angin (m/s),Cahaya (Lux),Curah Hujan (mm)\n";
+
+  // Memasukkan isi data Array
+  globalHistoryData.forEach((row, index) => {
+    let barisData = [
+      index + 1,
+      row.timestamp || '-',
+      Math.round(row.suhu ?? 0),
+      Math.round(row.kelembapan ?? 0),
+      Math.round(row.kecepatan_angin ?? 0),
+      Math.round(row.cahaya_lux ?? 0),
+      Math.round(row.curah_hujan ?? 0)
+    ];
+    csvContent += barisData.join(",") + "\n";
+  });
+
+  // Proses Download File Otomatis
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "Histori_Sistem_Energi.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
+
+// --- 9. INISIALISASI 5 CHART.JS ---
 function renderCharts(dataItems) {
   const labels = dataItems.map(d => (d.timestamp ? d.timestamp.split(' ')[1] || d.timestamp : '-'));
-  const dataSuhu = dataItems.map(d => d.suhu ?? 0);
-  const dataKelembapan = dataItems.map(d => d.kelembapan ?? 0);
-  const dataCahaya = dataItems.map(d => d.cahaya_lux ?? 0);
-  const dataAngin = dataItems.map(d => d.kecepatan_angin ?? 0);
-  const dataHujan = dataItems.map(d => d.curah_hujan ?? 0);
+  
+  // Data dibulatkan untuk grafik
+  const dataSuhu = dataItems.map(d => Math.round(d.suhu ?? 0));
+  const dataKelembapan = dataItems.map(d => Math.round(d.kelembapan ?? 0));
+  const dataCahaya = dataItems.map(d => Math.round(d.cahaya_lux ?? 0));
+  const dataAngin = dataItems.map(d => Math.round(d.kecepatan_angin ?? 0));
+  const dataHujan = dataItems.map(d => Math.round(d.curah_hujan ?? 0));
 
-  // Destroy jika chart sudah pernah dibuat
-  if (chartInstance1) chartInstance1.destroy();
-  if (chartInstance2) chartInstance2.destroy();
-  if (chartInstance3) chartInstance3.destroy();
+  // Destroy sebelum dirender ulang
+  if (cSuhu) cSuhu.destroy();
+  if (cKelembapan) cKelembapan.destroy();
+  if (cCahaya) cCahaya.destroy();
+  if (cAngin) cAngin.destroy();
+  if (cHujan) cHujan.destroy();
 
-  // Chart 1: Suhu & Kelembapan
-  const ctx1 = document.getElementById('chartSuhuKelembapan').getContext('2d');
-  chartInstance1 = new Chart(ctx1, {
+  const chartOptions = { responsive: true, maintainAspectRatio: false };
+
+  // 1. Chart Suhu
+  cSuhu = new Chart(document.getElementById('chartSuhu').getContext('2d'), {
     type: 'line',
-    data: {
-      labels: labels,
-      datasets: [
-        { label: 'Suhu (°C)', data: dataSuhu, borderColor: '#ef5663', tension: 0.3, fill: false },
-        { label: 'Kelembapan (%)', data: dataKelembapan, borderColor: '#20c77b', tension: 0.3, fill: false }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false }
+    data: { labels: labels, datasets: [{ label: 'Suhu (°C)', data: dataSuhu, borderColor: '#ef5663', backgroundColor: 'rgba(239, 86, 99, 0.1)', tension: 0.3, fill: true }] },
+    options: chartOptions
   });
 
-  // Chart 2: Cahaya Lux
-  const ctx2 = document.getElementById('chartCahaya').getContext('2d');
-  chartInstance2 = new Chart(ctx2, {
+  // 2. Chart Kelembapan
+  cKelembapan = new Chart(document.getElementById('chartKelembapan').getContext('2d'), {
     type: 'line',
-    data: {
-      labels: labels,
-      datasets: [
-        { label: 'Cahaya (Lux)', data: dataCahaya, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', tension: 0.3, fill: true }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false }
+    data: { labels: labels, datasets: [{ label: 'Kelembapan (%)', data: dataKelembapan, borderColor: '#20c77b', backgroundColor: 'rgba(32, 199, 123, 0.1)', tension: 0.3, fill: true }] },
+    options: chartOptions
   });
 
-  // Chart 3: Angin & Curah Hujan
-  const ctx3 = document.getElementById('chartAnginHujan').getContext('2d');
-  chartInstance3 = new Chart(ctx3, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        { label: 'Kecepatan Angin (m/s)', data: dataAngin, backgroundColor: '#3b82f6' },
-        { label: 'Curah Hujan', data: dataHujan, backgroundColor: '#8b5cf6' }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false }
+  // 3. Chart Cahaya
+  cCahaya = new Chart(document.getElementById('chartCahaya').getContext('2d'), {
+    type: 'line',
+    data: { labels: labels, datasets: [{ label: 'Cahaya (Lux)', data: dataCahaya, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', tension: 0.3, fill: true }] },
+    options: chartOptions
+  });
+
+  // 4. Chart Angin
+  cAngin = new Chart(document.getElementById('chartAngin').getContext('2d'), {
+    type: 'line',
+    data: { labels: labels, datasets: [{ label: 'Angin (m/s)', data: dataAngin, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', tension: 0.3, fill: true }] },
+    options: chartOptions
+  });
+
+  // 5. Chart Hujan
+  cHujan = new Chart(document.getElementById('chartHujan').getContext('2d'), {
+    type: 'bar', // Hujan biasa divisualisasikan dalam bentuk bar/batang
+    data: { labels: labels, datasets: [{ label: 'Curah Hujan (mm)', data: dataHujan, backgroundColor: '#8b5cf6' }] },
+    options: chartOptions
   });
 }
 </script>
