@@ -83,8 +83,8 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
 <div class="app">
   <aside class="side">
     <div class="brand">
-      <!-- Menggunakan logo yang diminta -->
-      <img src="image_f55e7b.jpg" alt="Logo">
+      <!-- MENGGUNAKAN NAMA FILE: logo.jpg -->
+      <img src="logo.jpg" alt="Logo">
       <div><b>Monitoring</b><small>Energi Terbarukan</small></div>
     </div>
     <nav class="nav">
@@ -102,8 +102,8 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
   <main>
     <header class="top">
       <div class="title-wrap">
-        <!-- Menggunakan logo yang diminta -->
-        <img class="site-logo" src="image_f55e7b.jpg" alt="Logo Institusi">
+        <!-- MENGGUNAKAN NAMA FILE: logo.jpg -->
+        <img class="site-logo" src="logo.jpg" alt="Logo Institusi">
         <div>
           <span class="eyebrow">STASIUN MONITORING</span>
           <h1>Sistem Energi Terbarukan</h1>
@@ -173,7 +173,7 @@ main{margin-left:245px;width:calc(100% - 245px);padding:0 30px 40px}
       </div>
     </section>
 
-    <!-- PAGE 2: GRAFIK (DIUBAH JADI 5 GRAFIK) -->
+    <!-- PAGE 2: GRAFIK (5 GRAFIK) -->
     <section id="grafik" class="page">
       <div class="intro">
         <h2>Grafik Tren Parameter</h2>
@@ -293,7 +293,7 @@ navLinks.forEach(link => {
     link.classList.add('active');
     document.getElementById(targetPage).classList.add('active');
 
-    // Re-render chart jika buka halaman grafik agar tidak "pipih/tergencet"
+    // Re-render chart jika buka halaman grafik agar tidak pipih
     if(targetPage === 'grafik') {
       if(cSuhu) cSuhu.resize();
       if(cKelembapan) cKelembapan.resize();
@@ -415,12 +415,9 @@ document.getElementById('btnDownloadCSV').addEventListener('click', () => {
     return;
   }
 
-  // Membuat Format CSV
   let csvContent = "data:text/csv;charset=utf-8,";
-  // Header CSV
   csvContent += "No,Waktu,Suhu (*C),Kelembapan (%),Kecepatan Angin (m/s),Cahaya (Lux),Curah Hujan (mm)\n";
 
-  // Memasukkan isi data Array
   globalHistoryData.forEach((row, index) => {
     let barisData = [
       index + 1,
@@ -434,7 +431,6 @@ document.getElementById('btnDownloadCSV').addEventListener('click', () => {
     csvContent += barisData.join(",") + "\n";
   });
 
-  // Proses Download File Otomatis
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
@@ -444,19 +440,16 @@ document.getElementById('btnDownloadCSV').addEventListener('click', () => {
   document.body.removeChild(link);
 });
 
-
 // --- 9. INISIALISASI 5 CHART.JS ---
 function renderCharts(dataItems) {
   const labels = dataItems.map(d => (d.timestamp ? d.timestamp.split(' ')[1] || d.timestamp : '-'));
   
-  // Data dibulatkan untuk grafik
   const dataSuhu = dataItems.map(d => Math.round(d.suhu ?? 0));
   const dataKelembapan = dataItems.map(d => Math.round(d.kelembapan ?? 0));
   const dataCahaya = dataItems.map(d => Math.round(d.cahaya_lux ?? 0));
   const dataAngin = dataItems.map(d => Math.round(d.kecepatan_angin ?? 0));
   const dataHujan = dataItems.map(d => Math.round(d.curah_hujan ?? 0));
 
-  // Destroy sebelum dirender ulang
   if (cSuhu) cSuhu.destroy();
   if (cKelembapan) cKelembapan.destroy();
   if (cCahaya) cCahaya.destroy();
@@ -465,37 +458,32 @@ function renderCharts(dataItems) {
 
   const chartOptions = { responsive: true, maintainAspectRatio: false };
 
-  // 1. Chart Suhu
   cSuhu = new Chart(document.getElementById('chartSuhu').getContext('2d'), {
     type: 'line',
     data: { labels: labels, datasets: [{ label: 'Suhu (°C)', data: dataSuhu, borderColor: '#ef5663', backgroundColor: 'rgba(239, 86, 99, 0.1)', tension: 0.3, fill: true }] },
     options: chartOptions
   });
 
-  // 2. Chart Kelembapan
   cKelembapan = new Chart(document.getElementById('chartKelembapan').getContext('2d'), {
     type: 'line',
     data: { labels: labels, datasets: [{ label: 'Kelembapan (%)', data: dataKelembapan, borderColor: '#20c77b', backgroundColor: 'rgba(32, 199, 123, 0.1)', tension: 0.3, fill: true }] },
     options: chartOptions
   });
 
-  // 3. Chart Cahaya
   cCahaya = new Chart(document.getElementById('chartCahaya').getContext('2d'), {
     type: 'line',
     data: { labels: labels, datasets: [{ label: 'Cahaya (Lux)', data: dataCahaya, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', tension: 0.3, fill: true }] },
     options: chartOptions
   });
 
-  // 4. Chart Angin
   cAngin = new Chart(document.getElementById('chartAngin').getContext('2d'), {
     type: 'line',
     data: { labels: labels, datasets: [{ label: 'Angin (m/s)', data: dataAngin, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', tension: 0.3, fill: true }] },
     options: chartOptions
   });
 
-  // 5. Chart Hujan
   cHujan = new Chart(document.getElementById('chartHujan').getContext('2d'), {
-    type: 'bar', // Hujan biasa divisualisasikan dalam bentuk bar/batang
+    type: 'bar', 
     data: { labels: labels, datasets: [{ label: 'Curah Hujan (mm)', data: dataHujan, backgroundColor: '#8b5cf6' }] },
     options: chartOptions
   });
